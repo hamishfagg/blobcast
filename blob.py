@@ -1,9 +1,7 @@
 #!/usr/bin/python
 
 import alsaaudio, time, audioop
-
-print("pcms:")
-print(alsaaudio.pcms())
+from timeit import default_timer as timer
 
 # Open the device in blocking capture mode.
 inp = alsaaudio.PCM(
@@ -12,8 +10,10 @@ inp = alsaaudio.PCM(
   channels=1,
   device="hw:CARD=Loopback,DEV=1",
   periodsize=160)
-
+tick = 0
 while True:
+  print(f"Time: {timer() - tick}")
+  tick = timer()
   # Read data from device
   l,data = inp.read()
   if l:
