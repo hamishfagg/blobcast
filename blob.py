@@ -3,6 +3,7 @@
 # import alsaaudio, time, audioop
 from rpi_hardware_pwm import HardwarePWM
 import time
+import sys
 
 # Open the device in blocking capture mode.
 # This setup means we get a bunch of data from alsa every 0.02s or every 50th of a second.
@@ -20,10 +21,13 @@ import time
 #     # Return the maximum of the absolute value of all samples in a fragment.
 #     print(audioop.max(data, 2))
 
+if len(sys.argv) == 1:
+    print("blob.py <freq> <duty> <time>")
+    sys.exit(0)
 
-pwm = HardwarePWM(pwm_channel=0, hz=25_000, chip=0)
-pwm.start(50) # full duty cycle
+pwm = HardwarePWM(pwm_channel=0, chip=0, hz=float(sys.argv[1]))
+pwm.start(float(sys.argv[2]))
 
-time.sleep(5)
+time.sleep(float(sys.argv[3]))
 
 pwm.stop()
