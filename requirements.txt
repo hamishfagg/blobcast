@@ -1,1 +1,2 @@
 pyalsaaudio
+rpi-hardware-pwm
