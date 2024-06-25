@@ -4,6 +4,7 @@
 from rpi_hardware_pwm import HardwarePWM
 import time
 import sys
+from itertools import cycle
 
 # Open the device in blocking capture mode.
 # This setup means we get a bunch of data from alsa every 0.02s or every 50th of a second.
@@ -21,13 +22,29 @@ import sys
 #     # Return the maximum of the absolute value of all samples in a fragment.
 #     print(audioop.max(data, 2))
 
-if len(sys.argv) == 1:
-    print("blob.py <freq> <duty> <time>")
-    sys.exit(0)
+def idle(pwm):
+    IDLE_CYCLE_TIME = 1.0  # Seconds
+    IDLE_CYCLE_STEPS = 10  # Steps in each direction. So total steps is 2* this number
+    IDLE_MAX_DUTY = 60
+    IDLE_MIN_DUTY = 30
 
-pwm = HardwarePWM(pwm_channel=0, chip=0, hz=float(sys.argv[1]))
-pwm.start(float(sys.argv[2]))
+    pwm.change_frequency(60)
+    pwm.start(IDLE_MAX_DUTY)
+    desc_range = range(IDLE_MAX_DUTY, IDLE_MIN_DUTY, -int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
+    asc_range = range(IDLE_MIN_DUTY, IDLE_MAX_DUTY, -int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
+    for duty in cycle(desc_range + asc_range):
+        time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
+        print(duty)
+        pwm.change_duty_cycle(duty)
 
-time.sleep(float(sys.argv[3]))
+# if len(sys.argv) == 1:
+#   print("blob.py <freq> <duty> <time>")
+#   sys.exit(0)
+
+pwm = HardwarePWM(pwm_channel=0, chip=0, hz=60.0)
+idle(pwm)
+# pwm.start(float(sys.argv[2]))
+
+# time.sleep(float(sys.argv[3]))
 
 pwm.stop()
