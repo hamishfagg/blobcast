@@ -31,7 +31,7 @@ def idle(pwm):
     pwm.change_frequency(60)
     pwm.start(IDLE_MAX_DUTY)
     desc_range = range(IDLE_MAX_DUTY, IDLE_MIN_DUTY, -int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
-    asc_range = range(IDLE_MIN_DUTY, IDLE_MAX_DUTY, -int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
+    asc_range = range(IDLE_MIN_DUTY, IDLE_MAX_DUTY, int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
     print([*desc_range, *asc_range])
     for duty in cycle([*desc_range, *asc_range]):
         time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
