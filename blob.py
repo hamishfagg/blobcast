@@ -29,7 +29,7 @@ def idle(pwm):
     IDLE_MAX_DUTY = 80
     IDLE_MIN_DUTY = 60
 
-    easing = QuadEaseInOut(start=IDLE_MIN_DUTY, end=IDLE_MAX_DUTY, duration=IDLE_MAX_DUTY)
+    easing = QuadEaseInOut(start=IDLE_MIN_DUTY, end=IDLE_MAX_DUTY)
 
     pwm.change_frequency(60)
     pwm.start(IDLE_MAX_DUTY)
@@ -38,6 +38,7 @@ def idle(pwm):
     
     steps = [*desc_range, *asc_range]
     print(steps)
+    steps = [(s-IDLE_MIN_DUTY)/(IDLE_MAX_DUTY-IDLE_MIN_DUTY) for s in steps]
     eased_steps = list(map(easing, steps))
     print(eased_steps)
 
