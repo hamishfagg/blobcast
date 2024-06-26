@@ -26,12 +26,12 @@ from easing_functions import QuadEaseInOut
 def idle(pwm):
     IDLE_CYCLE_TIME = 3.0  # Seconds
     IDLE_CYCLE_STEPS = 10  # Steps in each direction. So total steps is 2* this number
-    IDLE_MAX_DUTY = 80
-    IDLE_MIN_DUTY = 60
+    IDLE_MAX_DUTY = 70
+    IDLE_MIN_DUTY = 50
 
     easing = QuadEaseInOut(start=IDLE_MIN_DUTY, end=IDLE_MAX_DUTY)
 
-    pwm.change_frequency(60)
+    pwm.change_frequency(65)
     pwm.start(IDLE_MAX_DUTY)
     desc_range = range(IDLE_MAX_DUTY, IDLE_MIN_DUTY, -int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
     asc_range = range(IDLE_MIN_DUTY, IDLE_MAX_DUTY, int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
@@ -42,9 +42,13 @@ def idle(pwm):
     eased_steps = list(map(easing, steps))
     print(eased_steps)
 
-    for duty in cycle(eased_steps):
-        time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
-        pwm.change_duty_cycle(duty)
+    try:
+      for duty in cycle(eased_steps):
+          time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
+          pwm.change_duty_cycle(duty)
+    except KeyboardInterrupt:
+       pwm.stop()
+       raise
 
 # if len(sys.argv) == 1:
 #   print("blob.py <freq> <duty> <time>")
@@ -55,5 +59,3 @@ idle(pwm)
 # pwm.start(float(sys.argv[2]))
 
 # time.sleep(float(sys.argv[3]))
-
-pwm.stop()
