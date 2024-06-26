@@ -26,7 +26,7 @@ from easing_functions import QuadEaseInOut
 def idle(pwm):
     IDLE_CYCLE_TIME = 3.0  # Seconds
     IDLE_CYCLE_STEPS = 10  # Steps in each direction. So total steps is 2* this number
-    IDLE_MAX_DUTY = 70
+    IDLE_MAX_DUTY = 60
     IDLE_MIN_DUTY = 50
 
     easing = QuadEaseInOut(start=IDLE_MIN_DUTY, end=IDLE_MAX_DUTY)
