@@ -46,7 +46,7 @@ def idle(pwm):
       for duty in cycle(eased_steps):
           time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
           pwm.change_duty_cycle(duty)
-    except KeyboardInterrupt:
+    except:
        pwm.stop()
        raise
 
