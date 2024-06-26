@@ -42,20 +42,21 @@ def idle(pwm):
     eased_steps = list(map(easing, steps))
     print(eased_steps)
 
-    try:
-      for duty in cycle(eased_steps):
-          time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
-          pwm.change_duty_cycle(duty)
-    except:
-       pwm.stop()
-       raise
+    for duty in cycle(eased_steps):
+        time.sleep(IDLE_CYCLE_TIME/(IDLE_CYCLE_STEPS*2))
+        pwm.change_duty_cycle(duty)
 
 # if len(sys.argv) == 1:
 #   print("blob.py <freq> <duty> <time>")
 #   sys.exit(0)
 
+
 pwm = HardwarePWM(pwm_channel=0, chip=0, hz=60.0)
-idle(pwm)
+try:
+    idle(pwm)
+except:
+    pwm.stop()
+    raise
 # pwm.start(float(sys.argv[2]))
 
 # time.sleep(float(sys.argv[3]))
