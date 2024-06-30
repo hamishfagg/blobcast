@@ -1,3 +1,4 @@
 pyalsaaudio
 rpi-hardware-pwm
 easing-functions
+scipy
