@@ -60,7 +60,7 @@ if __name__ == "__main__":
             i = 0
             pwm.change_duty_cycle(100)
             time.sleep(2)
-            while i < 10:
+            while i < 10/float(sys.argv[2]):
                 pwm.change_duty_cycle(100)
                 time.sleep(float(sys.argv[2])/2)
                 pwm.change_duty_cycle(0)
