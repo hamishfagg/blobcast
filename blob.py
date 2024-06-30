@@ -6,7 +6,6 @@ import time
 import sys
 from itertools import cycle
 from easing_functions import QuadEaseInOut
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 # lows = 0-150
@@ -50,7 +49,7 @@ inp = alsaaudio.PCM(
     rate=SAMPLE_RATE,
     channels=1,
     device="hw:CARD=Loopback,DEV=1",
-    periodsize=SAMPLE_RATE/LOOP_HZ)
+    periodsize=int(SAMPLE_RATE/LOOP_HZ))
 
 pwm = HardwarePWM(pwm_channel=0, chip=0, hz=60.0)
 
@@ -64,6 +63,7 @@ try:
             max = audioop.max(data, 5)
             if max > AUDIO_SILENCE_THRESHOLD:
                 silence_time = 0
+                print("leaving idle")
             else:
                 silence_time += 1
 
