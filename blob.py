@@ -60,7 +60,7 @@ try:
         l, data = inp.read()
         if l:
             # Return the maximum of the absolute value of all samples in a fragment.
-            max = audioop.max(data, 5)
+            max = audioop.max(data, 4)
             if max > AUDIO_SILENCE_THRESHOLD:
                 silence_time = 0
                 print("leaving idle")
