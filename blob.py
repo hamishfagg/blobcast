@@ -50,26 +50,35 @@ inp = alsaaudio.PCM(
     periodsize=int(SAMPLE_RATE/LOOP_HZ))
 
 
-silence_time = 0
-try:
-    while True:
-        # Read data from device
-        l, data = inp.read()
-        if l:
-            # Return the maximum of the absolute value of all samples in a fragment.
-            max = audioop.max(data, 2)
-            if max > AUDIO_SILENCE_THRESHOLD:
-                silence_time = 0
-            else:
-                silence_time += 1
+if __name__ == "__main__":
+    try:
+        if len(sys.argv) > 1 and sys.argv[1] == "test":
+            pwm.change_duty_cycle(int(sys.argv[2]))
+            time.sleep(5)
 
-            if silence_time >= AUDIO_SILENCE_TIMEOUT:
-                idle(pwm)
-            else:
-                if max > 30_000:
-                    max = 30_000
-                pwm.change_duty_cycle(int(max/300))
+        else:
+            silence_time = 0
 
-except:
-    pwm.stop()
-    raise
+            while True:
+                # Read data from device
+                l, data = inp.read()
+                if l:
+                    # Return the maximum of the absolute value of all samples in a fragment.
+                    max = audioop.max(data, 2)
+                    if max > AUDIO_SILENCE_THRESHOLD:
+                        silence_time = 0
+                    else:
+                        silence_time += 1
+
+                    if silence_time >= AUDIO_SILENCE_TIMEOUT:
+                        idle(pwm)
+                    else:
+                        if max > 30_000:
+                            max = 30_000
+                        pwm.change_duty_cycle(int(max/300))
+
+    except:
+        pwm.stop()
+        raise
+    finally:
+        pwm.stop()
