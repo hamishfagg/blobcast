@@ -19,7 +19,7 @@ AUDIO_SILENCE_TIMEOUT = 5  # In loops. See LOOP_HZ above
 
 # Idle setup:
 IDLE_CYCLE_TIME = 3.0  # Seconds
-IDLE_CYCLE_STEPS = 10  # Steps in each direction. So total steps is 2* this number
+IDLE_CYCLE_STEPS = 50  # Steps in each direction. So total steps is 2* this number
 IDLE_MAX_DUTY = 60
 IDLE_MIN_DUTY = 50
 
@@ -64,7 +64,7 @@ try:
             max = audioop.max(data, 4)
             if max > AUDIO_SILENCE_THRESHOLD:
                 silence_time = 0
-                print("leaving idle")
+                print(max)
             else:
                 silence_time += 1
 
