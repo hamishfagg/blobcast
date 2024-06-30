@@ -31,8 +31,6 @@ pwm.start(IDLE_MAX_DUTY)
 
 steps = [*[x/1000.0 for x in range(1000, 0, -int(1000/IDLE_CYCLE_STEPS))], *[x/1000.0 for x in range(0, 1000, int(1000/IDLE_CYCLE_STEPS))]]
 eased_steps = list(map(easing, steps))
-print(steps)
-print(eased_steps)
 
 idle_index = 0
 
@@ -59,15 +57,18 @@ try:
         l, data = inp.read()
         if l:
             # Return the maximum of the absolute value of all samples in a fragment.
-            max = audioop.max(data, 4)
+            max = audioop.max(data, 2)
             if max > AUDIO_SILENCE_THRESHOLD:
                 silence_time = 0
-                print(max)
             else:
                 silence_time += 1
 
             if silence_time >= AUDIO_SILENCE_TIMEOUT:
                 idle(pwm)
+            else:
+                if max > 30_000:
+                    max = 30_000
+                pwm.change_duty_cycle(int(max/300))
 
 except:
     pwm.stop()
