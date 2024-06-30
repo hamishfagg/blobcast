@@ -55,7 +55,15 @@ if __name__ == "__main__":
         if len(sys.argv) > 1 and sys.argv[1] == "test":
             pwm.change_duty_cycle(int(sys.argv[2]))
             time.sleep(5)
-
+        
+        elif len(sys.argv) > 1 and sys.argv[1] == "test-pulse":
+            i = 0
+            while i < 10:
+                pwm.change_duty_cycle(100)
+                time.sleep(float(sys.argv[2])/2)
+                pwm.change_duty_cycle(0)
+                time.sleep(float(sys.argv[2])/2)
+                i += 1
         else:
             silence_time = 0
 
