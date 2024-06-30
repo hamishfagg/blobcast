@@ -29,12 +29,10 @@ pwm = HardwarePWM(pwm_channel=0, chip=0, hz=60.0)
 pwm.change_frequency(65)
 pwm.start(IDLE_MAX_DUTY)
 
-desc_range = range(IDLE_MAX_DUTY, IDLE_MIN_DUTY, -int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
-asc_range = range(IDLE_MIN_DUTY, IDLE_MAX_DUTY, int((IDLE_MAX_DUTY-IDLE_MIN_DUTY)/IDLE_CYCLE_STEPS))
-
-steps = [*desc_range, *asc_range]
-steps = [(s-IDLE_MIN_DUTY)/(IDLE_MAX_DUTY-IDLE_MIN_DUTY) for s in steps]
+steps = [*[x/1000.0 for x in range(1000, 0, -int(1000/IDLE_CYCLE_STEPS))], *[x/1000.0 for x in range(0, 1000, int(1000/IDLE_CYCLE_STEPS))]]
 eased_steps = list(map(easing, steps))
+print(steps)
+print(eased_steps)
 
 idle_index = 0
 
