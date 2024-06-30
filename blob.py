@@ -58,6 +58,8 @@ if __name__ == "__main__":
         
         elif len(sys.argv) > 1 and sys.argv[1] == "test-pulse":
             i = 0
+            pwm.change_duty_cycle(100)
+            time.sleep(2)
             while i < 10:
                 pwm.change_duty_cycle(100)
                 time.sleep(float(sys.argv[2])/2)
